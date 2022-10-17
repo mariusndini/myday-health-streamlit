@@ -19,18 +19,18 @@ def run_query(query):
         cur.execute(query)
         return cur.fetchall()
 
-conn_worksheets = snowflake.connector.connect( user= st.secrets["user_ws"],
-                                password= st.secrets["pw_ws"],
-                                account= st.secrets["acct_ws"],
-                                role = st.secrets["role_ws"],
-                                warehouse = 'streamlit',
-                                session_parameters={
-                                    'QUERY_TAG': 'Streamlit',
-                                })
-def run_ws(query):
-    with conn_worksheets.cursor() as cur:
-        cur.execute(query)
-        return cur.fetchall()
+# conn_worksheets = snowflake.connector.connect( user= st.secrets["user_ws"],
+#                                 password= st.secrets["pw_ws"],
+#                                 account= st.secrets["acct_ws"],
+#                                 role = st.secrets["role_ws"],
+#                                 warehouse = 'streamlit',
+#                                 session_parameters={
+#                                     'QUERY_TAG': 'Streamlit',
+#                                 })
+# def run_ws(query):
+#     with conn_worksheets.cursor() as cur:
+#         cur.execute(query)
+#         return cur.fetchall()
 
 
 
@@ -128,9 +128,9 @@ def input():
 
 
     if st.button('Save Graded Diet'):
-        save_SQL = f"""insert into SNOWHEALTH_LOCAL.pipeline_train.GRADED_DIET values(
+        save_SQL = f"""insert into sh_marius.pipeline_train.GRADED_DIET values(
                         '{modelName}',{cals},{carbs},{fat},{protein},{chol},{salt},{sugar},{grade},'{note}');"""
-        st.write( f"""Rows insert: {run_ws(save_SQL)[0][0]}""")
+        st.write( f"""Rows insert: {run_query(save_SQL)[0][0]}""")
 
 
 
@@ -140,8 +140,8 @@ def test():
     st.sidebar.markdown("# Test Models 🧠")
     st.markdown("# Test Models 🧠")
 
-    save_SQL = f""" select * from snowhealth_local.pipeline_train.model_list; """
-    trained_models = run_ws(save_SQL)
+    save_SQL = f""" select * from sh_marius.pipeline_train.model_list; """
+    trained_models = run_query(save_SQL)
 
     option = st.selectbox('Please Select a Trained Model Below', [i[0] for i in trained_models])
 
@@ -161,8 +161,8 @@ def test():
     st.markdown("""---""")
 
     if st.button('Grade My Diet'):
-        grade_SQL = f"""select SNOWHEALTH_LOCAL.PIPELINE_TRAIN.PREDICT_{option.upper()}({cals},{carbs},{fat},{protein},{chol},{salt},{sugar});"""
-        st.markdown( f"""# Your Diet Grade: {run_ws(grade_SQL)[0][0] }""")
+        grade_SQL = f"""select sh_marius.PIPELINE_TRAIN.PREDICT_{option.upper()}({cals},{carbs},{fat},{protein},{chol},{salt},{sugar});"""
+        st.markdown( f"""# Your Diet Grade: {run_query(grade_SQL)[0][0] }""")
         st.write("Remember - A grade of 5 follows the Diets rules and 1 does not.")
         st.markdown("""---""")
         st.write("The SQL to run the model is below - ")
