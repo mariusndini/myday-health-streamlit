@@ -95,7 +95,8 @@ def input():
     st.markdown("# Diet Input 🍔")
     st.markdown("##### Below input data points for a meal and grade it. Thereafter a ML/AI model will be trained on the crowd sourced data.")
 
-    st.markdown("![Alt Text](https://github.com/mariusndini/myday-health-streamlit/blob/main/mastercalss-QR.png?raw=true)")
+
+    st.markdown('<img src="https://github.com/mariusndini/myday-health-streamlit/blob/main/mastercalss-QR.png?raw=true" alt="drawing" width="200"/>')
 
 
     parems = st.experimental_get_query_params() or {"model":["DefaultModelName"]}
