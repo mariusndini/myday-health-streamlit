@@ -95,8 +95,8 @@ def input():
     st.markdown("# Diet Input 🍔")
 
     col1, col2 = st.columns([1, 3])
-    col1.st.markdown('<img src="https://github.com/mariusndini/myday-health-streamlit/blob/main/mastercalss-QR.png?raw=true" alt="drawing" width="200"/>', unsafe_allow_html=True)
-    col2.st.markdown("##### Below input data points for a meal and grade it. Thereafter a ML/AI model will be trained on the crowd sourced data.")
+    col1.markdown('<img src="https://github.com/mariusndini/myday-health-streamlit/blob/main/mastercalss-QR.png?raw=true" alt="drawing" width="200"/>', unsafe_allow_html=True)
+    col2.markdown("##### Below input data points for a meal and grade it. Thereafter a ML/AI model will be trained on the crowd sourced data.")
 
 
     parems = st.experimental_get_query_params() or {"model":["DefaultModelName"]}
