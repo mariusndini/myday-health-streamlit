@@ -92,7 +92,7 @@ def input():
     # Encoding data using make() function
     img = qrcode.make(data)
     img.save('MyQRCode2.png')
-    st.write(img)
+    st.write(img.image.pil.PilImage)
     st.markdown('<img src="MyQRCode2.png" alt="drawing" width="200"/>', unsafe_allow_html=True)
 
     parems = st.experimental_get_query_params() or {"model":["DefaultModelName"]}
