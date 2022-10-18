@@ -19,20 +19,6 @@ def run_query(query):
         cur.execute(query)
         return cur.fetchall()
 
-# conn_worksheets = snowflake.connector.connect( user= st.secrets["user_ws"],
-#                                 password= st.secrets["pw_ws"],
-#                                 account= st.secrets["acct_ws"],
-#                                 role = st.secrets["role_ws"],
-#                                 warehouse = 'streamlit',
-#                                 session_parameters={
-#                                     'QUERY_TAG': 'Streamlit',
-#                                 })
-# def run_ws(query):
-#     with conn_worksheets.cursor() as cur:
-#         cur.execute(query)
-#         return cur.fetchall()
-
-
 
 
 def main_page():
@@ -133,6 +119,23 @@ def input():
         st.write( f"""Rows insert: {run_query(save_SQL)[0][0]}""")
 
 
+# ----------------------------------------------------------------------------------
+# DONE INPUT PAGE ------------------------------------------------------------------
+# ----------------------------------------------------------------------------------
+
+
+
+
+
+def train():
+    st.sidebar.markdown("# Train Model 🤖")
+    st.markdown("# Train Models 🤖")
+
+
+# ----------------------------------------------------------------------------------
+# DONE TRAIN PAGE ------------------------------------------------------------------
+# ----------------------------------------------------------------------------------
+
 
 
 
@@ -180,6 +183,7 @@ def test():
 page_names_to_funcs = {
     "Admin Page": main_page,
     "Diet Input": input,
+    "Train Model": train,
     "Test Models": test,
 }
 
