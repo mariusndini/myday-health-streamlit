@@ -301,7 +301,7 @@ def test():
 
 
 page_names_to_funcs = {
-    "Admin Page": main_page,
+    # "Admin Page": main_page,
     "Meal Input": input,
     "Train Model": train,
     "Test Models": test,
