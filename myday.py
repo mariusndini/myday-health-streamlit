@@ -129,7 +129,8 @@ def input():
 
 def train():
     st.sidebar.markdown("# Train Model 🤖")
-    st.markdown("# Train Models 🤖")
+    st.sidebar.write('Here You will name your model and the model will be trained on Snowflake')
+    st.markdown("# Train Model 🤖")
 
 
 # ----------------------------------------------------------------------------------
