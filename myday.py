@@ -120,7 +120,7 @@ def input():
 
     st.markdown("""---""")
     if st.button('Show Data Points'):
-        datapoints = run_query(f""" select * from sh_marius.pipeline_train.GRADED_DIET; """)
+        datapoints = run_query(f""" select * from sh_marius.pipeline_train.GRADED_DIET where DIET_NAME='{modelName}'; """)
 
         datapoints_df = pd.DataFrame(
                 {
