@@ -146,11 +146,12 @@ CREATE OR REPLACE PROCEDURE SH_MARIUS.PIPELINE_TRAIN.TRAIN_MODEL(MODEL_NAME STRI
     RETURNS STRING
     LANGUAGE PYTHON
     RUNTIME_VERSION = '3.8'
-    PACKAGES = ('snowflake-snowpark-python', 'scikit-learn')
+    PACKAGES = ('snowflake-snowpark-python', 'scikit-learn') 
     HANDLER = 'main'
     AS
     $$
 
+    # Import Necessary Libraries Needed to Train Model
     import snowflake.snowpark as snowpark
     from snowflake.snowpark import Session
     from snowflake.snowpark.functions import udf
@@ -160,33 +161,32 @@ CREATE OR REPLACE PROCEDURE SH_MARIUS.PIPELINE_TRAIN.TRAIN_MODEL(MODEL_NAME STRI
     from sklearn.neural_network import MLPClassifier
 
     def main(session: snowpark.Session, MODEL_NAME):
-        MODELNAME = MODEL_NAME #MODEL NAME COMING FROM THE S.PROC DEF
-
+        # Define training Characteristics
         mlpc = MLPClassifier(hidden_layer_sizes = (10, 5), max_iter=2000);
         
+        # Define X values - From Snowflake Table
         x = session.sql(f"""SELECT CAL_DIFF, CARBS, FAT, PROTEIN, CHOL, SALT, SUGAR 
                             FROM SH_MARIUS.pipeline_train.GRADED_DIET
-                            WHERE DIET_NAME = '{MODELNAME}';""").collect()
+                            WHERE DIET_NAME = '{MODEL_NAME}';""").collect()
+
+        # Define Y Values - From Snowflake Table
         y = session.sql(F"""SELECT GRADE 
                             FROM SH_MARIUS.pipeline_train.GRADED_DIET
-                            WHERE DIET_NAME = '{MODELNAME}';""").collect()
+                            WHERE DIET_NAME = '{MODEL_NAME}';""").collect()
 
-        # Model Training 
+        # Model Training - Fit the model to your data in Snowflake
         mlpc.fit(x, y) 
 
-        @udf(name= f"""SH_MARIUS.pipeline_train.PREDICT_{MODELNAME}""", 
+        # Define & Create Model 
+        @udf(name= f"""PREDICT_{MODEL_NAME}""", 
             return_type=IntegerType(), 
             packages=["scikit-learn"],
             is_permanent=True, replace=True, 
-            stage_location="@SH_MARIUS.GRADES.HEALTH_STAGE",
+            stage_location="@MyStage",
             input_types=[FloatType(), FloatType(),FloatType(), FloatType(), FloatType(), FloatType(), FloatType()])
         
         def PREDICT_DIET(calAte, carbs, fat, protein, chol, salt, sugar):
             return mlpc.predict( [[calAte, carbs, fat, protein, chol, salt, sugar]] )[0]
-
-        session.sql(f"""insert into SH_MARIUS.pipeline_train.model_list values ('{MODELNAME}');""").collect()
-        return f"""Model {MODELNAME} Trained & Ready to Use"""
-
     $$
         
         '''
