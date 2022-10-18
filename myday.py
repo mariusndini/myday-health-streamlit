@@ -156,7 +156,7 @@ def train():
     parems = st.experimental_get_query_params() or {"model":["DefaultModelName"]}
     modelName = parems['model'][0]
 
-    c1, c2, c3 = st.columns(4)
+    c1, c2, c3 = st.columns(3)
 
     with c1:
         model_name = st.text_input('Model Name', modelName)
