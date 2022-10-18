@@ -81,6 +81,9 @@ def input():
     st.sidebar.write('Provide & grade meal information to be later used for ML Model training.')
     st.markdown("# Meal Input 🍔")
 
+    parems = st.experimental_get_query_params() or {"model":["DefaultModelName"]}
+    modelName = parems['model'][0]
+
     col1, col2 = st.columns([2, 4])
     col1.markdown('<img src="https://github.com/mariusndini/myday-health-streamlit/blob/main/mastercalss-QR.png?raw=true" alt="drawing" width="200"/>', unsafe_allow_html=True)
     col2.markdown("##### Input data points below for a specific meal and grade it with respect to your diet goals. Thereafter a ML/AI model will be trained on the crowd sourced data.")
@@ -90,13 +93,13 @@ def input():
     import base64
 
     # Data to be encoded
-    data = 'QR Code using make() function'
+    data = f'''https://snowhealth.streamlitapp.com/?model={modelName}'''
     
     qr = qrcode.QRCode(
         version=1,
         error_correction=qrcode.constants.ERROR_CORRECT_H,
         box_size=4,
-        border=4,
+        border=2,
     )
 
     qr.add_data(data)
@@ -113,8 +116,7 @@ def input():
 
 
 
-    parems = st.experimental_get_query_params() or {"model":["DefaultModelName"]}
-    modelName = parems['model'][0]
+    
     st.markdown(f"""### Model Name: {modelName}""")
 
     st.markdown("""---""")
