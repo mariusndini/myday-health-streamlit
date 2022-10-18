@@ -86,13 +86,13 @@ def input():
     col2.markdown("##### Input data points below for a specific meal and grade it with respect to your diet goals. Thereafter a ML/AI model will be trained on the crowd sourced data.")
 
     import qrcode
-    
     # Data to be encoded
     data = 'QR Code using make() function'
     
     # Encoding data using make() function
     img = qrcode.make(data)
     img.save('MyQRCode2.png')
+    st.print(img)
     st.markdown('<img src="MyQRCode2.png" alt="drawing" width="200"/>', unsafe_allow_html=True)
 
     parems = st.experimental_get_query_params() or {"model":["DefaultModelName"]}
