@@ -107,6 +107,7 @@ def input():
     img.save(buffered)
     img_str = base64.b64encode(buffered.getvalue()).decode("utf-8")
     st.write(img_str )
+    st.markdown(f""" <img src="data:image/png;base64, {img_str}" alt="QrCode" />""", unsafe_allow_html = True)
 
 
 
