@@ -157,6 +157,9 @@ def train():
     modelName = parems['model'][0]
     model_name = st.text_input('Model Name', modelName)
 
+    itrations = st.number_input('Training Iterations', min_value=1, step = 1)
+
+
     if st.button('Train My Model'):
         grade_SQL = f""" call SH_MARIUS.PIPELINE_TRAIN.TRAIN_MODEL('{model_name}'); """
         st.write( f"""Your Model: {run_query(grade_SQL)[0][0] }""")
