@@ -118,6 +118,26 @@ def input():
                         '{modelName}',{cals},{carbs},{fat},{protein},{chol},{salt},{sugar},{grade},'{note}');"""
         st.write( f"""Rows insert: {run_query(save_SQL)[0][0]}""")
 
+    st.markdown("""---""")
+    if st.button('Show Data Points'):
+        datapoints = run_query(f""" select * from sh_marius.pipeline_train.GRADED_DIET; """)
+
+        datapoints_df = pd.DataFrame(
+                {
+                    "Name": [i[0] for i in datapoints],
+                    "Cals": [i[1] for i in datapoints],
+                    "Carbs": [i[2] for i in datapoints],
+                    "Fat": [i[3] for i in datapoints],
+                    "Protein": [i[4] for i in datapoints],
+                    "Chol": [i[5] for i in datapoints],
+                    "Salt": [i[6] for i in datapoints],
+                    "Sugar": [i[7] for i in datapoints],
+                    "Grade": [i[8] for i in datapoints],
+                    "Note": [i[9] for i in datapoints]
+                }
+        )
+
+        df = st.dataframe(datapoints_df)
 
 # ----------------------------------------------------------------------------------
 # DONE INPUT PAGE ------------------------------------------------------------------
