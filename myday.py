@@ -158,17 +158,17 @@ def train():
 
     model_name = st.text_input('Model Name', modelName)
     iter = st.number_input('Training Iterations', min_value=1, step = 1)
-    layers = st.text_input( "Enter Layers", placeholder="e.g: 10,5,15")
+    layers = st.text_input( "Enter Layers (array)", placeholder="e.g: 10,5,15")
 
     if st.button('Train My Model'):
-        grade_SQL = f""" call SH_MARIUS.PIPELINE_TRAIN.TRAIN_MODEL('{model_name}', {iter}); """
+        grade_SQL = f""" call SH_MARIUS.PIPELINE_TRAIN.TRAIN_MODEL('{model_name}', {iter}, [{layers}]); """
         st.write( f"""Your Model: {run_query(grade_SQL)[0][0] }""")
 
     st.write(f'''Your model is being trained via the Python Stored Procedure below. 
                  This model is fully trained and running on Snowflake Compute Warehouse. ''')
 
     code = '''
-CREATE OR REPLACE PROCEDURE SH_MARIUS.PIPELINE_TRAIN.TRAIN_MODEL(MODEL_NAME STRING)
+CREATE OR REPLACE PROCEDURE SH_MARIUS.PIPELINE_TRAIN.TRAIN_MODEL(MODEL_NAME STRING, ITER INTEGER, LAYERS ARRAY)
     RETURNS STRING
     LANGUAGE PYTHON
     RUNTIME_VERSION = '3.8'
@@ -187,15 +187,15 @@ CREATE OR REPLACE PROCEDURE SH_MARIUS.PIPELINE_TRAIN.TRAIN_MODEL(MODEL_NAME STRI
     from sklearn.neural_network import MLPClassifier
 
     def main(session: snowpark.Session, MODEL_NAME):
-        # Define training Characteristics
-        mlpc = MLPClassifier(hidden_layer_sizes = (10, 5), max_iter=2000);
+        # Model Characteristics
+        mlpc = MLPClassifier(hidden_layer_sizes = (LAYERS), max_iter= ITER);
         
-        # Define X values - From Snowflake Table
+        # X values - From Snowflake Table
         x = session.sql(f"""SELECT CAL_DIFF, CARBS, FAT, PROTEIN, CHOL, SALT, SUGAR 
                             FROM SH_MARIUS.pipeline_train.GRADED_DIET
                             WHERE DIET_NAME = '{MODEL_NAME}';""").collect()
 
-        # Define Y Values - From Snowflake Table
+        # Y Values - From Snowflake Table
         y = session.sql(F"""SELECT GRADE 
                             FROM SH_MARIUS.pipeline_train.GRADED_DIET
                             WHERE DIET_NAME = '{MODEL_NAME}';""").collect()
@@ -203,7 +203,7 @@ CREATE OR REPLACE PROCEDURE SH_MARIUS.PIPELINE_TRAIN.TRAIN_MODEL(MODEL_NAME STRI
         # Model Training - Fit the model to your data in Snowflake
         mlpc.fit(x, y) 
 
-        # Define & Create Model 
+        # Define, Create Model & Create UDF With Trained Model
         @udf(name= f"""PREDICT_{MODEL_NAME}""", 
             return_type=IntegerType(), 
             packages=["scikit-learn"],
