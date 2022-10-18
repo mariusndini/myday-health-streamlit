@@ -104,7 +104,7 @@ def input():
     img = qr.make_image()
 
     buffered = BytesIO()
-    img.save(buffered, format="PNG")
+    img.save(buffered)
     img_str = base64.b64encode(buffered.getvalue()).decode("utf-8")
     st.write(img_str )
 
