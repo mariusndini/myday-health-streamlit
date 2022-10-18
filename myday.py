@@ -24,6 +24,7 @@ def run_query(query):
 def main_page():
     st.markdown("# MyDay Admin 🎈")
     st.sidebar.markdown("# MyDay Admin 🎈")
+    st.sidebar.write('High level application user statistics for admin purposes.')
 
     pop_count = run_query(f"""
         select count(distinct id) as pop
@@ -77,7 +78,7 @@ def main_page():
 
 def input():
     st.sidebar.markdown("# Diet Input 🍔")
-
+    st.sidebar.write('Provide & grade meal information to be later used for ML Model training.')
     st.markdown("# Diet Input 🍔")
 
     col1, col2 = st.columns([2, 4])
@@ -149,7 +150,7 @@ def input():
 
 def train():
     st.sidebar.markdown("# Train Model 🤖")
-    st.sidebar.write('Here You will name your model and the model will be trained on Snowflake')
+    st.sidebar.write('Model is trained from this page provided some high level inputs.')
     st.markdown("# Train Model 🤖")
     
     parems = st.experimental_get_query_params() or {"model":["DefaultModelName"]}
@@ -224,6 +225,7 @@ CREATE OR REPLACE PROCEDURE SH_MARIUS.PIPELINE_TRAIN.TRAIN_MODEL(MODEL_NAME STRI
 
 def test():
     st.sidebar.markdown("# Test Models 🧠")
+    st.sidebar.write('Test the trained models in Snowflake via this page.')
     st.markdown("# Test Models 🧠")
 
     save_SQL = f""" select distinct * from sh_marius.pipeline_train.model_list; """
