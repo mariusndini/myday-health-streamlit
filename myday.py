@@ -152,6 +152,7 @@ def train():
     st.sidebar.write('Here You will name your model and the model will be trained on Snowflake')
     st.markdown("# Train Model 🤖")
     
+    parems = st.experimental_get_query_params() or {"model":["DefaultModelName"]}
     modelName = parems['model'][0]
     model_name = st.text_input('Model Name)', modelName)
 
