@@ -138,6 +138,9 @@ def train():
         grade_SQL = f""" call SH_MARIUS.PIPELINE_TRAIN.TRAIN_MODEL('{model_name}'); """
         st.write( f"""Your Model: {run_query(grade_SQL)[0][0] }""")
 
+    st.write(f'''Your model is being trained via the Python Stored Procedure below. 
+                 This model is fully trained and running on Snowflake Compute Warehouse. ''')
+
     code = '''
 CREATE OR REPLACE PROCEDURE SH_MARIUS.PIPELINE_TRAIN.TRAIN_MODEL(MODEL_NAME STRING)
     RETURNS STRING
