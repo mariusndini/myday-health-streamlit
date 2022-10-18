@@ -165,14 +165,15 @@ def train():
     with c3:
         layers = st.text_input( "Enter Layers (array)", placeholder="e.g: 10,5,15")
 
-    if st.button('Train My Model'):
+    if st.button('Train Model'):
         grade_SQL = f""" call SH_MARIUS.PIPELINE_TRAIN.TRAIN_MODEL('{model_name}', {iter}, [{layers}]); """
         st.write( f"""Your Model: {run_query(grade_SQL)[0][0] }""")
     
     st.markdown("""---""")
     
     st.write(f'''Your model is being trained via the Python Stored Procedure below. 
-                 This model is fully trained and running on Snowflake Compute Warehouse. ''')
+                 This model is fully trained on Snowflake Compute Warehouse. 
+                 The model is then deployed to a UDF to be used as needed.''')
 
     code = '''
 CREATE OR REPLACE PROCEDURE TRAIN_MODEL(MODEL_NAME STRING, ITER INTEGER, LAYERS ARRAY)
