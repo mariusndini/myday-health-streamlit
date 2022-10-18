@@ -155,7 +155,7 @@ def train():
     
     parems = st.experimental_get_query_params() or {"model":["DefaultModelName"]}
     modelName = parems['model'][0]
-    model_name = st.text_input('Model Name)', modelName)
+    model_name = st.text_input('Model Name', modelName)
 
     if st.button('Train My Model'):
         grade_SQL = f""" call SH_MARIUS.PIPELINE_TRAIN.TRAIN_MODEL('{model_name}'); """
