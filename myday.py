@@ -88,9 +88,8 @@ def input():
     from io import BytesIO
     import base64
 
-    # Data to be encoded
+    # Data to be encoded via the QR code 
     data = f'''https://snowhealth.streamlitapp.com/?model={modelName}'''
-    
     qr = qrcode.QRCode(
         version=1,
         error_correction=qrcode.constants.ERROR_CORRECT_H,
@@ -105,6 +104,7 @@ def input():
     buffered = BytesIO()
     img.save(buffered)
     img_str = base64.b64encode(buffered.getvalue()).decode("utf-8")
+    #  DONE MAKING QR CODE
 
     col1, col2 = st.columns([2, 4])
     col1.markdown(f""" <img src="data:image/png;base64, {img_str}" alt="QrCode" />""", unsafe_allow_html = True)
