@@ -156,7 +156,7 @@ def train():
     parems = st.experimental_get_query_params() or {"model":["DefaultModelName"]}
     modelName = parems['model'][0]
 
-    c1, c2, c3, c4 = st.columns(4)
+    c1, c2, c3 = st.columns(4)
 
     with c1:
         model_name = st.text_input('Model Name', modelName)
@@ -164,10 +164,10 @@ def train():
         iter = st.number_input('Training Iterations', min_value=1, step = 1)
     with c3:
         layers = st.text_input( "Enter Layers (array)", placeholder="e.g: 10,5,15")
-    with c4:
-        if st.button('Train My Model'):
-            grade_SQL = f""" call SH_MARIUS.PIPELINE_TRAIN.TRAIN_MODEL('{model_name}', {iter}, [{layers}]); """
-            st.write( f"""Your Model: {run_query(grade_SQL)[0][0] }""")
+
+    if st.button('Train My Model'):
+        grade_SQL = f""" call SH_MARIUS.PIPELINE_TRAIN.TRAIN_MODEL('{model_name}', {iter}, [{layers}]); """
+        st.write( f"""Your Model: {run_query(grade_SQL)[0][0] }""")
 
     st.write(f'''Your model is being trained via the Python Stored Procedure below. 
                  This model is fully trained and running on Snowflake Compute Warehouse. ''')
