@@ -151,8 +151,9 @@ def train():
     st.sidebar.markdown("# Train Model 🤖")
     st.sidebar.write('Here You will name your model and the model will be trained on Snowflake')
     st.markdown("# Train Model 🤖")
-
-    model_name = st.text_input('Name your model', '')
+    
+    modelName = parems['model'][0]
+    model_name = st.text_input('Model Name)', modelName)
 
     if st.button('Train My Model'):
         grade_SQL = f""" call SH_MARIUS.PIPELINE_TRAIN.TRAIN_MODEL('{model_name}'); """
@@ -246,8 +247,8 @@ def test():
 
     if st.button('Grade My Diet'):
         grade_SQL = f"""select sh_marius.PIPELINE_TRAIN.PREDICT_{option.upper()}({cals},{carbs},{fat},{protein},{chol},{salt},{sugar});"""
-        st.markdown( f"""# Your Diet Grade: {run_query(grade_SQL)[0][0] }""")
-        st.write("Remember - A grade of 5 follows the Diets rules and 1 does not.")
+        st.markdown( f"""# Your Meal Grade: {run_query(grade_SQL)[0][0] }""")
+        st.write("Remember - A grade of 5 follows the Diet's rules and 1 does not.")
         st.markdown("""---""")
         st.write("The SQL to run the model is below - ")
         st.markdown(f"""<b style='color:#FFBF00'>{grade_SQL}</b>""", unsafe_allow_html=True)
