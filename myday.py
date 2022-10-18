@@ -85,6 +85,15 @@ def input():
     col1.markdown('<img src="https://github.com/mariusndini/myday-health-streamlit/blob/main/mastercalss-QR.png?raw=true" alt="drawing" width="200"/>', unsafe_allow_html=True)
     col2.markdown("##### Input data points below for a specific meal and grade it with respect to your diet goals. Thereafter a ML/AI model will be trained on the crowd sourced data.")
 
+    import qrcode
+    
+    # Data to be encoded
+    data = 'QR Code using make() function'
+    
+    # Encoding data using make() function
+    img = qrcode.make(data)
+
+
 
     parems = st.experimental_get_query_params() or {"model":["DefaultModelName"]}
     modelName = parems['model'][0]
